@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#2E4372">
+<meta name="robots" content="noindex, nofollow">
+<title>Colony Map — Hill Country Humane Society</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app">
+
+  <div class="topbar">
+    <div id="envBanner" class="env-banner" hidden></div>
+
+    <div class="topbar-row">
+      <div class="brand">Colony Map<small>Hill Country Humane Society</small></div>
+
+      <div class="search-wrap">
+        <input id="search" class="search" type="search" autocomplete="off"
+               placeholder="Search address, caretaker, notes…" aria-label="Search colonies">
+        <button id="searchClear" class="search-clear" hidden aria-label="Clear search">&times;</button>
+      </div>
+
+      <button id="filterBtn" class="icon-btn" aria-label="Filters">
+        Filters <span id="filterCount" class="count" hidden>0</span>
+      </button>
+    </div>
+
+    <div class="summary" id="summary" role="status"></div>
+    <div class="summary-full" id="summaryFull"></div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div id="map" role="application" aria-label="Map of community cat colonies"></div>
+
+  <button id="attentionBtn" class="attention-btn">
+    Needs attention <span class="badge" id="attentionCount">0</span>
+  </button>
+
+  <button id="addBtn" class="fab">+ Add Colony</button>
+
+</div>
+
+<div class="scrim" id="scrim"></div>
+
+<!-- every panel in the app shares this one sheet -->
+<section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="grabber" id="grabber"><i></i></div>
+  <header class="sheet-head">
+    <div style="min-width:0">
+      <h2 id="sheetTitle">—</h2>
+      <div class="sub" id="sheetSub"></div>
+    </div>
+    <button class="sheet-close" id="sheetClose" aria-label="Close">&times;</button>
+  </header>
+  <div class="sheet-body" id="sheetBody"></div>
+  <footer class="sheet-foot" id="sheetFoot" hidden></footer>
+</section>
+
+<div id="toasts" aria-live="polite"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<!-- v2.58+ is needed for the new sb_publishable_… key format -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+
+<script src="config.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/store.js"></script>
+<script src="js/map.js"></script>
+<script src="js/colony.js"></script>
+<script src="js/forms.js"></script>
+<script src="js/filters.js"></script>
+<script src="js/attention.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
