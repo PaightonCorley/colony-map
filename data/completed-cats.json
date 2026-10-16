@@ -1,0 +1,211 @@
+{
+  "source": "HCHS_Completed_Cats.xlsx",
+  "asOf": "2026-10-14",
+  "total": 1754,
+  "dateUnclear": 17,
+  "basis": "Past clinic entries treated as completed; not independently verified surgery outcomes.",
+  "locations": [
+    {
+      "id": "done-11",
+      "colonyId": "99b2be0a-9452-4f73-beac-270fc3b99cc0",
+      "area": "Bertram",
+      "cats": 1,
+      "dates": {
+        "2026-02-11": 1
+      }
+    },
+    {
+      "id": "done-43",
+      "colonyId": "87f3e88a-49ca-4d31-9786-58a3215380dc",
+      "area": "Burnet",
+      "cats": 5,
+      "dates": {
+        "2026-03-06": 1,
+        "2026-03-26": 2,
+        "2026-04-03": 1,
+        "2026-04-23": 1
+      }
+    },
+    {
+      "id": "done-103",
+      "colonyId": "85834e2d-4013-45a8-90cc-15cd62e9e0d8",
+      "area": "Marble Falls",
+      "cats": 3,
+      "dates": {
+        "2026-05-07": 3
+      }
+    },
+    {
+      "id": "done-115",
+      "colonyId": "bbace0bb-6425-4d8e-8ae3-acd88e1e85c4",
+      "area": "Bertram",
+      "cats": 4,
+      "dates": {
+        "2026-05-20": 4
+      }
+    },
+    {
+      "id": "done-157",
+      "colonyId": "8d2ee169-d3ec-4a2b-99cb-b76b5eb51b26",
+      "area": "Llano",
+      "cats": 12,
+      "dates": {
+        "2026-06-17": 3,
+        "2026-06-24": 1,
+        "2026-07-23": 7,
+        "2026-08-19": 1
+      }
+    },
+    {
+      "id": "done-161",
+      "colonyId": "37fc25c4-12d6-4bfc-950c-78394899423b",
+      "area": "Cottonwood Shores",
+      "cats": 2,
+      "dates": {
+        "2026-06-17": 2
+      }
+    },
+    {
+      "id": "done-166",
+      "colonyId": "ad1b7f51-755e-4288-8b21-453ec08d9e32",
+      "area": "Llano",
+      "cats": 3,
+      "dates": {
+        "2026-07-01": 3
+      }
+    },
+    {
+      "id": "done-252",
+      "colonyId": "9d183b9a-7d9f-463c-a50a-c42f241432c2",
+      "area": "Tow",
+      "cats": 4,
+      "dates": {
+        "2026-09-09": 1,
+        "2026-10-08": 3
+      }
+    }
+  ],
+  "unlocated": [
+    {
+      "area": "Granite Shoals",
+      "cats": 139
+    },
+    {
+      "area": "Burnet",
+      "cats": 313
+    },
+    {
+      "area": "Marble Falls",
+      "cats": 104
+    },
+    {
+      "area": "Llano",
+      "cats": 75
+    },
+    {
+      "area": "Cottonwood Shores",
+      "cats": 29
+    },
+    {
+      "area": "Not assigned",
+      "cats": 176
+    },
+    {
+      "area": "Hill Country Cats - city not recorded",
+      "cats": 169
+    },
+    {
+      "area": "HCHS - origin not recorded",
+      "cats": 220
+    },
+    {
+      "area": "Bertram",
+      "cats": 71
+    },
+    {
+      "area": "Horseshoe Bay",
+      "cats": 30
+    },
+    {
+      "area": "Kingsland",
+      "cats": 117
+    },
+    {
+      "area": "Tow",
+      "cats": 11
+    },
+    {
+      "area": "Meadowlakes",
+      "cats": 6
+    },
+    {
+      "area": "Buchanan Dam",
+      "cats": 91
+    },
+    {
+      "area": "Living Love - city not recorded",
+      "cats": 14
+    },
+    {
+      "area": "River Run - city not recorded",
+      "cats": 65
+    },
+    {
+      "area": "Brady",
+      "cats": 11
+    },
+    {
+      "area": "FF - city not recorded",
+      "cats": 11
+    },
+    {
+      "area": "San Saba",
+      "cats": 9
+    },
+    {
+      "area": "Not recorded",
+      "cats": 20
+    },
+    {
+      "area": "Temple",
+      "cats": 1
+    },
+    {
+      "area": "Lampasas",
+      "cats": 8
+    },
+    {
+      "area": "Spicewood",
+      "cats": 15
+    },
+    {
+      "area": "Round Mountain",
+      "cats": 1
+    },
+    {
+      "area": "Liberty Hill",
+      "cats": 4
+    },
+    {
+      "area": "Highland Haven",
+      "cats": 2
+    },
+    {
+      "area": "Johnson City",
+      "cats": 2
+    },
+    {
+      "area": "Oakalla",
+      "cats": 3
+    },
+    {
+      "area": "Briggs",
+      "cats": 2
+    },
+    {
+      "area": "Kempner",
+      "cats": 1
+    }
+  ],
+  "locationNote": "Only unambiguous street-and-city matches to existing colonies are linked. New residential addresses and contact details are not stored in this repository."
+}

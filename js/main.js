@@ -9,15 +9,13 @@ const App = (() => {
 
   async function start() {
     MapView.init();
+    await Completed.init();
 
     let res;
     try {
       res = await Store.init();
     } catch (err) {
-      document.getElementById('map').innerHTML =
-        '<div class="empty" style="padding-top:80px">Could not load the colony data.<br>' +
-        UI.esc(err.message || '') + '</div>';
-      return;
+      res = {mode: 'preview', error: err.message};
     }
     mode = res.mode;
     showEnvBanner(res);
@@ -25,7 +23,8 @@ const App = (() => {
     Store.onChange(refreshView);
     bindChrome();
     refreshView();
-    MapView.fitAll(Store.mapped());
+    if (Completed.isActive()) Completed.fit();
+    else MapView.fitAll(Store.mapped());
   }
 
   function showEnvBanner(res) {
@@ -40,6 +39,7 @@ const App = (() => {
   /* ------------------------------------------------------------ render */
 
   function refreshView() {
+    if (Completed.render()) return;
     const visible = Filters.apply(Store.all());
     const onMap = visible.filter(c => !c.out_of_area && c.latitude !== null);
 
@@ -168,3 +168,4 @@ const App = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', () => App.start());
+
