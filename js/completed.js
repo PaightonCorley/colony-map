@@ -1,6 +1,6 @@
 /* Completed clinic snapshot. Independent of live colony estimates and visits. */
 const Completed = (() => {
-  let data = null, error = '', active = true, layer;
+  let data = null, error = '', active = false, layer;
   function hydrate() {
     if (!data) return;
     data.locations.forEach(g => {
@@ -49,7 +49,7 @@ const Completed = (() => {
     document.getElementById('summaryFull').classList.remove('open');
     if (!data) {
       document.getElementById('summary').textContent = error;
-      document.getElementById('completedNote').textContent = 'Reload to try again, or choose Colony work to view the existing tracker.';
+      document.getElementById('completedNote').textContent = 'Reload to try again, or choose All colonies to view the existing tracker.';
       return true;
     }
     const visible = rows(), pinned = data.locations.filter(mapped), mappedCats = sum(pinned);
