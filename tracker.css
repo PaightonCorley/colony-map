@@ -1,0 +1,39 @@
+[hidden] { display:none !important; }
+.tracker-tools {display:flex;gap:6px;padding:6px 10px;align-items:center;border-top:1px solid var(--rule)}
+.tracker-tools button,.tracker-tools summary {min-height:44px;padding:10px 12px;background:#eef2f8;border:1px solid #cbd2de;border-radius:9px;font-size:14px;font-weight:650;cursor:pointer;white-space:nowrap}
+.tracker-tools details {position:relative;margin-left:auto}
+#colorLegend {position:absolute;right:0;top:48px;width:280px;max-width:90vw;z-index:900;background:white;padding:14px;box-shadow:0 6px 28px #0003;border:1px solid var(--rule);border-radius:12px}
+#colorLegend span {display:flex;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+#colorLegend i,.tracker-dot {display:inline-block;width:18px;height:18px;border:1.5px solid #344054;border-radius:50%;flex:none}
+#colorLegend p,.tracker-note {font-size:13px;line-height:1.5;color:#475467}
+.tracker-list {padding:0;margin:0;list-style:none}
+.tracker-list li {border-bottom:1px solid var(--rule)}
+.tracker-list button {display:flex;align-items:flex-start;gap:12px;text-align:left;width:100%;padding:16px 0;min-height:72px}
+.record-copy {display:grid;gap:5px;min-width:0;overflow-wrap:anywhere}
+.record-copy strong {font-size:16px}.record-copy span {font-size:14px}.record-copy small {color:#475467}
+.tracker-heading {display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.tracker-heading small {color:#475467}.tracker-status {padding:7px 12px;border:1px solid #64748b;border-radius:8px;font-size:13px;font-weight:700;color:#182230}
+.tracker-counts {grid-template-columns:repeat(3,minmax(0,1fr)) !important}
+.tracker-counts .n {font-size:22px;overflow-wrap:anywhere}.tracker-counts .l {font-size:12px}
+.leaflet-marker-icon .pin {margin:12px;width:20px;height:20px;border-width:2px}
+.leaflet-tooltip {font-size:12px;font-weight:650;color:#172b4d;pointer-events:none}
+.seg.status {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.seg.status button {white-space:normal;min-height:48px;border:1px solid var(--rule);border-radius:8px !important}
+.contact-line a {min-height:44px;display:inline-flex;align-items:center;overflow-wrap:anywhere}
+.kv dd,.orig {overflow-wrap:anywhere;min-width:0}
+.summary {gap:12px;min-height:42px;font-size:12px}.summary button {text-decoration:underline;min-height:36px;color:var(--accent);white-space:nowrap}
+.search,.icon-btn {min-height:44px;font-size:16px}
+#trackerError {color:#a11b1b}.input {font-size:16px !important}
+.sheet {max-height:92dvh}.sheet-body {overscroll-behavior:contain}.sheet-close {min-width:48px;min-height:48px}
+.completed-controls {gap:6px}.completed-controls select {min-height:40px;max-width:100%}
+@media(max-width:600px){
+ .brand {display:none}.topbar-row{padding:8px}.search{font-size:16px}.search-wrap{width:100%}
+ .tracker-tools {padding:4px 8px}.tracker-tools button,.tracker-tools summary {padding:9px 10px;font-size:13px}
+ .completed-controls {padding:4px 8px}.completed-controls label{font-size:12px}.completed-controls select{font-size:13px}
+ .summary {padding:4px 10px;gap:9px}.sheet-body{padding:14px}.sheet-head{padding:12px 14px}
+ .attention-btn,.fab {height:48px;padding:0 12px;font-size:13px;bottom:calc(16px + env(safe-area-inset-bottom))}
+ .attention-btn{left:8px}.fab{right:8px}.btn-row{flex-wrap:wrap}.btn-row .btn{flex:1 1 120px}
+ .leaflet-control-zoom a {width:44px !important;height:44px !important;line-height:44px !important}
+ .sheet-foot {padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+}
+@media(max-height:500px){.completed-controls{display:none}.sheet{max-height:96dvh}.tracker-tools{padding-top:0;padding-bottom:0}}

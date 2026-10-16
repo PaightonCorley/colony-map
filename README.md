@@ -74,3 +74,30 @@ This is a dated snapshot, not a live Excel connection. Replace the aggregate dat
 when the completed workbook changes, reconciling locations plus unlocated counts
 to total. Do not count future bookings or no-shows, duplicate colony estimates,
 or assume a matched clinic record means every cat at that colony is fixed.
+
+
+
+## October 16 tracker update
+
+The current tracker was imported from COLONY TRACKER (4).xlsx. Row status colors
+match the workbook: Done green, Working orange, MASH Scheduled blue, Urgent yellow,
+Not Started white, Will Not Answer gray. Blank status stays white and unspecified.
+Done clinic cats do not establish that an entire colony is complete. Unknown
+remaining counts stay unknown. The 630 MASH source cats reconcile independently
+of original estimates and the earlier 1,754-entry clinic snapshot.
+
+All 137 previous database records and their existing pins were retained. 120 were
+matched and updated; 311 records were added. There are 448 records, including 17
+unmatched previous records, supplemental trapping entries and one excluded audit
+record. These are records, not a count of distinct confirmed colonies.
+
+Workbook metadata is stored with a versioned [HCHS_TRACKER_V1] marker in the
+existing original_notes field and decoded by js/tracker.js. The original note
+portion remains visible. This allows the existing database schema and history to
+remain intact. No private workbook contents are committed to this repository.
+
+The List button includes all records, including those without coordinates.
+New coordinates are reused only for an unambiguous identical existing address;
+missing locations are never placed at invented city-center pins. Same-coordinate
+pins open a chooser so overlapping records remain accessible. Data updates are
+an October 16 import, not a continuous connection to Excel.

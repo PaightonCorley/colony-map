@@ -86,7 +86,7 @@ const Attention = (() => {
       '</div>' +
       (list.length
         ? '<ul class="list">' + list.map(c => row(c)).join('') + '</ul>'
-        : '<div class="empty">Nothing outstanding. Every colony is marked Complete.</div>');
+        : '<div class="empty">No records match this attention list. Check green records for unknown remaining counts.</div>');
 
     UI.openSheet({
       title: 'Needs Attention',
@@ -109,7 +109,7 @@ const Attention = (() => {
   function row(c) {
     const rem = c.est_remaining;
     return '<li data-colony="' + UI.esc(c.id) + '">' +
-      '<span class="dot" style="background:var(--' + UI.statusColor(c.status) + ')"></span>' +
+      '<span class="dot" style="background:' + Tracker.color(c) + ';border:1px solid #344054"></span>' +
       '<div class="main">' +
         '<div class="t">' + UI.esc(c.location_text || c.name || c.colony_code) + '</div>' +
         '<div class="m">' + UI.esc(c.city_area || 'Area unknown') +
@@ -125,3 +125,4 @@ const Attention = (() => {
 
   return { open, count, ranked, score };
 })();
+

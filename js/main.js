@@ -22,6 +22,7 @@ const App = (() => {
 
     Store.onChange(refreshView);
     bindChrome();
+    Tracker.init();
     refreshView();
     if (Completed.isActive()) Completed.fit();
     else MapView.fitAll(Store.mapped());
@@ -44,7 +45,7 @@ const App = (() => {
     const onMap = visible.filter(c => !c.out_of_area && c.latitude !== null);
 
     MapView.render(onMap, id => ColonyPanel.open(id));
-    renderSummary(visible);
+    Tracker.summary(visible);
     Filters.renderChips(refreshView);
 
     const fc = document.getElementById('filterCount');
@@ -54,6 +55,7 @@ const App = (() => {
     document.getElementById('filterBtn').classList.toggle('on', n > 0);
 
     document.getElementById('attentionCount').textContent = Attention.count();
+    document.getElementById('colonyListBtn').textContent = 'List (' + visible.length + ')';
   }
 
   function renderSummary(visible) {
@@ -168,4 +170,5 @@ const App = (() => {
 })();
 
 document.addEventListener('DOMContentLoaded', () => App.start());
+
 

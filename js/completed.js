@@ -40,7 +40,7 @@ const Completed = (() => {
   }
   function render() {
     hydrate();
-    ['filterBtn','chips','attentionBtn','addBtn'].forEach(id => document.getElementById(id).hidden = active);
+    ['filterBtn','chips','attentionBtn','addBtn','colonyListBtn','fitMapBtn','locateBtn'].forEach(id => document.getElementById(id).hidden = active);
     ['completedFilter','doneListBtn','completedNote'].forEach(id => document.getElementById(id).hidden = !active);
     document.getElementById('search').placeholder = active ? 'Search completed addresses or areas…' : 'Search address, caretaker, notes…';
     document.getElementById('envBanner').hidden = active || Store.isLive();
@@ -57,7 +57,7 @@ const Completed = (() => {
       '<span class="s-item done-total"><b>'+fmt(data.total)+'</b> cats completed</span><span class="sep">|</span>'+
       '<span class="s-item"><b>'+fmt(mappedCats)+'</b> on map</span><span class="sep">|</span>'+
       '<span class="s-item"><b>'+fmt(data.total-mappedCats)+'</b> need a location</span>';
-    document.getElementById('completedNote').textContent = 'Completed list through Oct 14, 2026 · '+data.dateUnclear+' entries have unclear dates. '+
+    document.getElementById('completedNote').textContent = 'Earlier clinic snapshot (separate from the current tracker). Through Oct 14, 2026 · '+data.dateUnclear+' entries have unclear dates. '+
       'Past clinic entries are treated as completed; this does not mean every cat in a colony is fixed. Only existing address matches are pinned. '+
       fmt(sum(visible))+' cats match your search and filter.';
     visible.filter(mapped).forEach(g => {
@@ -97,3 +97,4 @@ const Completed = (() => {
   }
   return {init,render,fit,isActive:()=>active};
 })();
+

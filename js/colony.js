@@ -41,7 +41,7 @@ const ColonyPanel = (() => {
   function skeleton(c) {
     return [
       banners(c),
-      countTiles(c),
+      c.tracker ? Tracker.panel(c) : Tracker.panel(c) + countTiles(c),
       '<button class="btn btn-primary btn-big" id="recordVisit">RECORD TNVR VISIT</button>',
       '<div class="btn-row">' +
         '<button class="btn" id="quickUpdate">Quick Update</button>' +
@@ -209,7 +209,7 @@ const ColonyPanel = (() => {
     if (!bits.length) return '';
     return '<div class="block"><h3>Original spreadsheet entry</h3>' +
       '<div class="orig">' + UI.esc(bits.join('\n')) + '</div>' +
-      '<div style="font-size:12px;color:var(--ink-3);margin-top:7px">Kept exactly as it was written. This never changes.</div>' +
+      '<div style="font-size:12px;color:var(--ink-3);margin-top:7px">Kept exactly as it was written. Preserved from the source record.</div>' +
       '</div>';
   }
 
@@ -327,7 +327,7 @@ const ColonyPanel = (() => {
     const on = (sel, fn) => { const el = UI.$(sel); if (el) el.addEventListener('click', fn); };
 
     on('#recordVisit', () => Forms.recordVisit(c.id));
-    on('#quickUpdate', () => Forms.quickUpdate(c.id));
+    on('#quickUpdate', () => Tracker.edit(c));
     on('#editDetails', () => Forms.editDetails(c.id));
     on('#claimBtn',    () => Forms.claim(c.id));
     on('#moreBtn',     () => Forms.moreActions(c.id));
@@ -354,3 +354,4 @@ const ColonyPanel = (() => {
 
   return { open, reopen, current, suggestStatus };
 })();
+

@@ -54,7 +54,7 @@ const Filters = (() => {
     c.__blob = normalize([
       c.location_text, c.name, c.address_line, c.city_area, c.county, c.colony_code,
       c.caretaker_name, c.reporter_name, c.notes, c.original_notes,
-      c.original_estimate_text, (c.orgs_involved || []).join(' ')
+      c.original_estimate_text, (c.orgs_involved || []).join(' '), c.tracker ? JSON.stringify(c.tracker) : ''
     ].join(' '));
     return c.__blob;
   }
@@ -70,7 +70,7 @@ const Filters = (() => {
         const terms = normalize(state.q).split(' ').filter(Boolean);
         if (!terms.every(t => fuzzyHit(blob, t))) return false;
       }
-      if (state.status.length && !state.status.includes(c.status)) return false;
+      if (state.status.length && !state.status.includes(Tracker.status(c))) return false;
       if (state.help && c.trapping_help_needed !== true) return false;
       if (state.kittens && !(c.kittens_present === true || (c.kitten_count || 0) > 0)) return false;
       if (state.unmapped && c.latitude !== null) return false;
@@ -108,7 +108,7 @@ const Filters = (() => {
     const box = UI.$('#chips');
     const chips = [];
 
-    state.status.forEach(s => chips.push({ k: 'status:' + s, label: UI.STATUS_LABEL[s] }));
+    state.status.forEach(s => chips.push({ k: 'status:' + s, label: s }));
     if (state.help)     chips.push({ k: 'help',     label: 'Trapping help needed' });
     if (state.kittens)  chips.push({ k: 'kittens',  label: 'Kittens present' });
     if (state.unmapped) chips.push({ k: 'unmapped', label: 'Needs a pin' });
@@ -144,7 +144,7 @@ const Filters = (() => {
 
   function openSheet(onChange) {
     const counts = {};
-    Store.all().forEach(c => { counts[c.status] = (counts[c.status] || 0) + 1; });
+    Store.all().forEach(c => { counts[Tracker.status(c)] = (counts[Tracker.status(c)] || 0) + 1; });
 
     const toggle = (key, label, sub) =>
       '<li data-toggle="' + key + '"><div class="main"><div class="t">' + UI.esc(label) + '</div>' +
@@ -154,10 +154,10 @@ const Filters = (() => {
     const body =
       '<div class="field"><label>Status — tap to combine</label>' +
         '<div class="seg status" data-multi="status">' +
-        ['needs_tnvr','in_progress','complete'].map(s =>
+        Object.keys(Tracker.COLORS).map(s =>
           '<button type="button" data-v="' + s + '"' +
           (state.status.includes(s) ? ' class="on"' : '') + '>' +
-          UI.STATUS_LABEL[s] + ' (' + (counts[s] || 0) + ')</button>').join('') +
+          UI.esc(s) + ' (' + (counts[s] || 0) + ')</button>').join('') +
         '</div></div>' +
 
       '<div class="block"><h3>Operational</h3><ul class="list">' +
@@ -173,7 +173,7 @@ const Filters = (() => {
       '</ul></div>' +
 
       '<div class="block"><h3>Place</h3>' +
-        selectRow('City / area', 'f_city', window.CONFIG.CITIES, state.city) +
+        selectRow('City / area', 'f_city', [...new Set(Store.all().map(c=>c.city_area).filter(Boolean))].sort(), state.city) +
         selectRow('County', 'f_county', window.CONFIG.COUNTIES, state.county) +
         selectRow('Organization involved', 'f_org', window.CONFIG.ORGS, state.org) +
       '</div>';
@@ -224,3 +224,4 @@ const Filters = (() => {
 
   return { state, apply, activeCount, isFiltered, renderChips, reset, openSheet, setSearch, setStatus, set };
 })();
+

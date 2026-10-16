@@ -53,15 +53,14 @@ const MapView = (() => {
       (isClaimed(colony) ? ' pin-claim' : '');
     return L.divIcon({
       className: '',
-      html: '<div class="' + cls + '"></div>',
-      iconSize: [18, 18],
-      iconAnchor: [9, 9]
+      html: '<div class="' + cls + '" style="background:' + Tracker.color(colony) + ';border-color:#344054"></div>',
+      iconSize: [44, 44],
+      iconAnchor: [22, 22]
     });
   }
 
   function estimateLabel(c) {
-    const count = UI.num(c.est_total_cats);
-    return count === null ? 'Est. ? cats' : 'Est. ' + count + (count === 1 ? ' cat' : ' cats');
+    return 'Est. ' + (Tracker.estimate(c) === 'Unknown' ? '?' : Tracker.estimate(c)) + ' cats';
   }
 
   function isClaimed(c) {
@@ -87,7 +86,8 @@ const MapView = (() => {
       m.on('click', ev => {
         L.DomEvent.stopPropagation(ev);
         select(c.id);
-        onPinClick(c.id);
+        const shared=list.filter(other=>other.latitude===c.latitude && other.longitude===c.longitude);
+        if(shared.length>1)Tracker.openList(shared,'Records at this pin');else onPinClick(c.id);
       });
       m.addTo(layer);
       markers[c.id] = { marker: m, colony: c };
@@ -117,7 +117,7 @@ const MapView = (() => {
   }
 
   function fitAll(list) {
-    const pts = list.filter(c => c.latitude !== null).map(c => [c.latitude, c.longitude]);
+    const pts = list.filter(c => c.latitude !== null && c.longitude !== null).map(c => [c.latitude, c.longitude]);
     if (!pts.length) return;
     map.fitBounds(L.latLngBounds(pts), { padding: [40, 40], maxZoom: 14 });
   }
@@ -173,3 +173,4 @@ const MapView = (() => {
   return { init, render, select, clearSelection, focus, fitAll,
            startPick, stopPick, placePickMarker, locate, instance, isClaimed };
 })();
+

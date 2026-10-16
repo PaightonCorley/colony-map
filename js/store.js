@@ -78,7 +78,7 @@ const Store = (() => {
   /* CSV gives everything back as strings. Make the types real, and keep
      unknown as null rather than letting it collapse into zero. */
   function normalize(r) {
-    const c = Object.assign({}, r);
+    const c = Tracker.decode(Object.assign({}, r));
     ['est_total_cats','est_total_min','est_total_max','known_fixed','kitten_count','source_row']
       .forEach(k => { c[k] = UI.num(c[k]); });
     ['latitude','longitude'].forEach(k => {
@@ -109,6 +109,7 @@ const Store = (() => {
   /* Remaining is unknown when the total is unknown — not zero.
      It can never be negative. */
   function remaining(c) {
+    if (c.tracker) return Tracker.number(c.tracker.todo);
     if (c.est_total_cats === null) return null;
     return Math.max(0, c.est_total_cats - (c.known_fixed || 0));
   }
@@ -172,6 +173,14 @@ const Store = (() => {
   async function updateColony(id, patch, editor) {
     requireLive();
     UI.setEditorName(editor);
+    const current = byId(id);
+    if (current && current.tracker && !Object.prototype.hasOwnProperty.call(patch, 'original_notes')) {
+      const meta = {...current.tracker};
+      if ('known_fixed' in patch) meta.done = patch.known_fixed === null ? '' : String(patch.known_fixed);
+      if ('est_total_cats' in patch) meta.estimate = patch.est_total_cats === null ? '' : String(patch.est_total_cats);
+      if ('status' in patch) { meta.status = ({complete:'DONE',in_progress:'WORKING',needs_tnvr:'NOT STARTED'})[patch.status]; meta.color = Tracker.COLORS[meta.status]; }
+      patch = {...patch, original_notes: Tracker.encode(current, meta)};
+    }
     const body = Object.assign({}, patch, { last_editor: editor || null });
     const { data, error } = await sb.from('colonies').update(body).eq('id', id).select().single();
     if (error) throw error;
@@ -208,6 +217,16 @@ const Store = (() => {
       delete historyByColony[visit.colony_id];
       const { data: fresh } = await sb.from('colonies').select('*').eq('id', visit.colony_id).single();
       if (fresh) {
+        const prior = byId(visit.colony_id);
+        if (prior && prior.tracker) {
+          const meta = {...prior.tracker, done: fresh.known_fixed === null ? '' : String(fresh.known_fixed)};
+          const left = Tracker.number(meta.todo);
+          if (left !== null) meta.todo = String(Math.max(0, left - (Number(visit.num_newly_fixed) || 0)));
+          const raw = Tracker.encode(prior, meta);
+          const {error: metaError} = await sb.from('colonies').update({original_notes:raw}).eq('id',visit.colony_id);
+          if (metaError) UI.toast('Visit saved; tracker details need review.', 'err');
+          else fresh.original_notes = raw;
+        }
         const i = colonies.findIndex(c => c.id === visit.colony_id);
         if (i >= 0) colonies[i] = normalize(fresh);
       }
@@ -272,3 +291,4 @@ const Store = (() => {
     nearby, metresBetween, remaining
   };
 })();
+
