@@ -59,6 +59,11 @@ const MapView = (() => {
     });
   }
 
+  function estimateLabel(c) {
+    const count = UI.num(c.est_total_cats);
+    return count === null ? 'Est. ? cats' : 'Est. ' + count + (count === 1 ? ' cat' : ' cats');
+  }
+
   function isClaimed(c) {
     if (!c.claimed_by || !c.claimed_until) return false;
     return UI.parseDate(c.claimed_until) >= new Date(new Date().toDateString());
@@ -75,9 +80,10 @@ const MapView = (() => {
       const m = L.marker([c.latitude, c.longitude], {
         icon: icon(c, c.id === selectedId),
         keyboard: true,
-        title: c.location_text || c.name || c.colony_code,
+        title: (c.location_text || c.name || c.colony_code || 'Colony') + ' — ' + estimateLabel(c),
         riseOnHover: true
       });
+      m.bindTooltip(estimateLabel(c), { permanent: true, direction: 'top', offset: [0, -10] });
       m.on('click', ev => {
         L.DomEvent.stopPropagation(ev);
         select(c.id);
