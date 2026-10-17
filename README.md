@@ -115,3 +115,13 @@ Each source ID appears exactly once. Tracker totals are not added to this
 ledger. Matching source totals replace the green marker display count while
 the original tracker count is retained separately. Clinic entries are not
 independently verified procedures or unique animal identities.
+
+## City-only completed markers
+
+Per user request, completed entries with a city but no street address display
+as dark green numbered city hall placeholders. They remain separate from
+actual colony coordinates, are labeled in the legend and detail sheet, and
+count once toward the existing total. No city hall coordinates are written
+into colony records. Cities without a configured verified hall and records
+without a city remain unplaced. Public reference locations and provenance are
+in data/city-halls.json.

@@ -25,7 +25,7 @@ const App = (() => {
     Tracker.init();
     refreshView();
     if (Completed.isActive()) Completed.fit();
-    else MapView.fitAll(Store.mapped());
+    else MapView.fitAll([...Store.mapped(),...Completed.cityLocations()]);
   }
 
   function showEnvBanner(res) {

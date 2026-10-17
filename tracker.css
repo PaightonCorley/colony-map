@@ -48,3 +48,5 @@
 .history-overview {padding:6px 10px;background:#eaf4e4;border-top:1px solid #bdd2b6}
 .history-overview button {display:grid;gap:4px;text-align:left;width:100%;min-height:48px;color:#183323}
 .history-overview strong {font-size:17px}.history-overview span {font-size:12px;line-height:1.4}
+
+.city-only-marker span {background:#23734b !important;color:#fff !important;border:3px dashed #fff !important;outline:2px solid #174e34;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-size:15px;box-sizing:border-box}

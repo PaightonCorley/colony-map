@@ -1,0 +1,73 @@
+{
+  "Burnet": {
+    "latitude": 30.756843648056,
+    "longitude": -98.225046372633,
+    "address": "301 E Jackson St, Burnet, TX 78611",
+    "source": "https://geocoding.geo.census.gov/geocoder/",
+    "precision": "Approximate city hall street address"
+  },
+  "Brady": {
+    "latitude": 31.135580800001,
+    "longitude": -99.33394433932,
+    "address": "201 E Main St, Brady, TX",
+    "source": "https://geocoding.geo.census.gov/geocoder/",
+    "precision": "Approximate city hall street address"
+  },
+  "Cottonwood Shores": {
+    "latitude": 30.549822498473,
+    "longitude": -98.320761976142,
+    "address": "3808 Cottonwood Dr, Cottonwood Shores, TX",
+    "source": "https://geocoding.geo.census.gov/geocoder/",
+    "precision": "Approximate city hall street address"
+  },
+  "Meadowlakes": {
+    "latitude": 30.560324654576,
+    "longitude": -98.291567650656,
+    "address": "177 Broadmoor St, Meadowlakes, TX",
+    "source": "https://geocoding.geo.census.gov/geocoder/",
+    "precision": "Approximate city hall street address"
+  },
+  "San Saba": {
+    "latitude": 31.194047616083,
+    "longitude": -98.719315576726,
+    "address": "303 S Clear St, San Saba, TX",
+    "source": "https://geocoding.geo.census.gov/geocoder/",
+    "precision": "Approximate city hall street address"
+  },
+  "Marble Falls": {
+    "latitude": 30.571353373557,
+    "longitude": -98.276227041581,
+    "address": "800 3rd St, Marble Falls, TX",
+    "source": "https://geocoding.geo.census.gov/geocoder/",
+    "precision": "Approximate city hall street address"
+  },
+  "Horseshoe Bay": {
+    "latitude": 30.543601364692,
+    "longitude": -98.364547587043,
+    "address": "1 Community Dr, Horseshoe Bay, TX",
+    "source": "https://geocoding.geo.census.gov/geocoder/",
+    "precision": "Approximate city hall street address"
+  },
+  "Bertram": {
+    "latitude": 30.74293,
+    "longitude": -98.05578,
+    "address": "110 East Vaughan Street, Bertram, TX",
+    "source": "https://mapcarta.com/31718462",
+    "precision": "City hall building"
+  },
+  "Llano": {
+    "latitude": 30.750473,
+    "longitude": -98.678611,
+    "address": "301 W Main St, Llano, TX",
+    "source": "https://topoquest.com/place/texas/populated-place/llano/1361576",
+    "precision": "City hall building"
+  },
+  "Granite Shoals": {
+    "latitude": 30.603796793429,
+    "longitude": -98.375770681713,
+    "address": "2221 N Phillips Ranch Rd, Granite Shoals, Texas, 78654",
+    "source": "https://www.graniteshoals.org/334/Administration",
+    "coordinateSource": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
+    "precision": "City hall address point"
+  }
+}

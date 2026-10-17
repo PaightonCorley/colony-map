@@ -58,9 +58,9 @@ const Tracker = (() => {
   }
   function init() {
     document.getElementById('colonyListBtn').onclick=()=>openList();
-    document.getElementById('fitMapBtn').onclick=()=>MapView.fitAll(Filters.apply(Store.all()).filter(c=>!c.out_of_area));
+    document.getElementById('fitMapBtn').onclick=()=>MapView.fitAll([...Filters.apply(Store.all()).filter(c=>!c.out_of_area),...Completed.cityLocations().filter(g=>!Filters.state.city||Filters.state.city===g.area)]);
     document.getElementById('locateBtn').onclick=async()=>{try {const p=await MapView.locate();MapView.instance().setView([p.lat,p.lng],14);}catch(e){UI.toast(e.message,'err');}};
-    document.getElementById('colorLegend').innerHTML=Object.entries(COLORS).filter(([s])=>s!=='Unspecified').map(([s,c])=>'<span><i style="background:'+c+'"></i>'+UI.esc(s)+'</span>').join('')+'<p>Green circles show cats done. Paired green and orange circles mean Working: done on green, still to do on orange. ? means the count is unknown. Other estimates appear when you zoom in. Green follows the tracker; a blank remaining count does not confirm the colony is finished.</p>';
+    document.getElementById('colorLegend').innerHTML=Object.entries(COLORS).filter(([s])=>s!=='Unspecified').map(([s,c])=>'<span><i style="background:'+c+'"></i>'+UI.esc(s)+'</span>').join('')+'<span><i style="background:#23734b;border-style:dashed"></i>DONE — city hall placeholder</span><p>Dark green counts represent city-only records, not colony locations. Green circles show cats done. Paired green and orange circles mean Working: done on green, still to do on orange. ? means the count is unknown. Other estimates appear when you zoom in. Green follows the tracker; a blank remaining count does not confirm the colony is finished.</p>';
   }
   return {decode,encode,partial,status,color,number,estimate,todo,done,badge,panel,openList,summary,edit,init,COLORS};
 })();
