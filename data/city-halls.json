@@ -69,5 +69,29 @@
     "source": "https://www.graniteshoals.org/334/Administration",
     "coordinateSource": "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer",
     "precision": "City hall address point"
+  },
+  "Kingsland": {
+    "latitude": 30.6582405,
+    "longitude": -98.4405849,
+    "address": "Central Kingsland \u2014 approximate town location",
+    "source": "https://www.tshaonline.org/handbook/entries/kingsland-tx",
+    "precision": "Town-center placeholder",
+    "kind": "town_center"
+  },
+  "Buchanan Dam": {
+    "latitude": 30.7399037,
+    "longitude": -98.4311413,
+    "address": "Central Buchanan Dam \u2014 approximate town location",
+    "source": "https://www.tshaonline.org/handbook/entries/buchanan-dam-tx",
+    "precision": "Town-center placeholder",
+    "kind": "town_center"
+  },
+  "Tow": {
+    "latitude": 30.8835094,
+    "longitude": -98.4725331,
+    "address": "Central Tow \u2014 approximate town location",
+    "source": "https://www.tshaonline.org/handbook/entries/tow-tx",
+    "precision": "Town-center placeholder",
+    "kind": "town_center"
   }
 }

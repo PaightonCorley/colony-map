@@ -50,3 +50,5 @@
 .history-overview strong {font-size:17px}.history-overview span {font-size:12px;line-height:1.4}
 
 .city-only-marker span {background:#23734b !important;color:#fff !important;border:3px dashed #fff !important;outline:2px solid #174e34;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-size:15px;box-sizing:border-box}
+
+.list-pair {display:flex;gap:2px;flex:none;padding-top:3px}.list-pair i {width:30px;height:30px;border-radius:50%;border:1.5px solid #344054;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;font-style:normal}

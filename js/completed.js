@@ -17,7 +17,7 @@ const Completed = (() => {
     const el=document.getElementById('historyOverview');
     if(!data){el.textContent=error||'Loading completed cats…';return;}
     const pinned=sum(data.locations.filter(mapped)), addressed=sum(data.locations), missing=sum(data.unlocated), cityCats=sum(data.unlocated.filter(mapped));
-    el.innerHTML='<button id="historyOpen"><strong>'+fmt(data.total)+' completed cat records</strong><span>'+fmt(pinned)+' at colony pins · '+fmt(cityCats)+' at city halls · '+fmt(addressed-pinned)+' addressed, need pins · '+fmt(missing-cityCats)+' unplaced</span></button>';
+    el.innerHTML='<button id="historyOpen"><strong>'+fmt(data.total)+' completed cat records</strong><span>'+fmt(pinned)+' at colony pins · '+fmt(cityCats)+' at city/town placeholders · '+fmt(addressed-pinned)+' addressed, need pins · '+fmt(missing-cityCats)+' unplaced</span></button>';
     document.getElementById('historyOpen').onclick=()=>{document.getElementById('search').value='';document.getElementById('completedFilter').value='all';openList();};
   }
   const mapped = g => Number.isFinite(g.latitude) && Number.isFinite(g.longitude);
@@ -77,7 +77,7 @@ const Completed = (() => {
     return true;
   }
   function drawMarker(g) {
-    const marker=L.marker([g.latitude,g.longitude],{bubblingMouseEvents:false,title:g.address+' — '+g.cats+' completed cats'+(g.cityOnly?' — City hall placeholder, not a colony location':''),keyboard:true,
+    const marker=L.marker([g.latitude,g.longitude],{bubblingMouseEvents:false,title:g.address+' — '+g.cats+' completed cats'+(g.cityOnly?' — City/town placeholder, not a colony location':''),keyboard:true,
       icon:L.divIcon({className:g.cityOnly?'done-marker city-only-marker':'done-marker',html:'<span>'+g.cats+'</span>',iconSize:[44,44],iconAnchor:[22,22]})}).addTo(layer);
     marker.on('click',e=>{L.DomEvent.stopPropagation(e);openLocation(g);});
   }
@@ -90,7 +90,7 @@ const Completed = (() => {
   function openLocation(g) {
     UI.openSheet({title:UI.esc(g.address),sub:UI.esc(g.area),body:
       '<div class="done-detail-count">'+g.cats+' <small>cats completed</small></div>'+
-      '<p>'+UI.esc(g.cityOnly ? 'CITY-ONLY RECORD — NOT A COLONY LOCATION. This dark green dot represents completed cats recorded in '+g.area+' without street addresses. City hall is a display placeholder only: '+g.locationSource+'.' : mapped(g) ? 'Location: '+g.locationSource+'. Street-level coordinates may be approximate; confirm the site before visiting.' : (g.pendingAddressImport ? 'The workbook has an address for these cats. Its import is pending approval; the cats are included in the total.' : g.colonyId ? 'Recorded address retained; this location needs a confirmed map pin.' : 'The source has no street address for these cats. They remain included in the total.'))+'</p>'+
+      '<p>'+UI.esc(g.cityOnly ? 'CITY-ONLY RECORD — NOT A COLONY LOCATION. This dark green dot represents completed cats recorded in '+g.area+' without street addresses. This is a city hall or town-center display placeholder only: '+g.locationSource+'.' : mapped(g) ? 'Location: '+g.locationSource+'. Street-level coordinates may be approximate; confirm the site before visiting.' : (g.pendingAddressImport ? 'The workbook has an address for these cats. Its import is pending approval; the cats are included in the total.' : g.colonyId ? 'Recorded address retained; this location needs a confirmed map pin.' : 'The source has no street address for these cats. They remain included in the total.'))+'</p>'+
       '<p>Included once in the 1,754 source entries. '+UI.esc(g.match||g.reason||'')+'</p>'+
       (g.colonyId?'<button class="btn" id="historyColony">Open tracker location</button>':'')+
       '<p class="hint">Historical counts and tracker counts may overlap; they are not added together. A historical clinic entry does not confirm that the whole colony is finished.</p>'+
@@ -103,8 +103,8 @@ const Completed = (() => {
   function openList() {
     hydrate(); const visible = rows();
     UI.openSheet({title:'Completed cats',sub:fmt(sum(visible))+' cats in this view',body:
-      '<p class="hint">Light green: colony pins. Dark green: city hall placeholders, not colony locations. Unplaced records remain included in the total.</p>'+
-      (visible.length ? visible.map(g => '<button class="done-row" data-done="'+g.id+'"><span><strong>'+UI.esc(g.address)+'</strong><small>'+UI.esc(g.area)+' · '+(g.cityOnly?'City hall placeholder':mapped(g)?'Colony pin':'Needs a location')+'</small></span><b>'+g.cats+'</b></button>').join('') : '<p>No matching records.</p>')});
+      '<p class="hint">Light green: colony pins. Dark green: city/town placeholders, not colony locations. Unplaced records remain included in the total.</p>'+
+      (visible.length ? visible.map(g => '<button class="done-row" data-done="'+g.id+'"><span><strong>'+UI.esc(g.address)+'</strong><small>'+UI.esc(g.area)+' · '+(g.cityOnly?'City/town placeholder':mapped(g)?'Colony pin':'Needs a location')+'</small></span><b>'+g.cats+'</b></button>').join('') : '<p>No matching records.</p>')});
     document.querySelectorAll('[data-done]').forEach(el => el.addEventListener('click', () => {
       const g=visible.find(g => g.id === el.dataset.done);
       if(mapped(g)) MapView.instance().setView([g.latitude,g.longitude],15);

@@ -53,11 +53,11 @@ const MapView = (() => {
     const cls = 'pin pin-' + UI.statusColor(colony.status) +
       (selected ? ' pin-sel' : '') +
       (isClaimed(colony) ? ' pin-claim' : '');
-    const partial = Tracker.partial(colony), completed = Tracker.status(colony) === 'DONE' || (typeof Completed!=='undefined' && Completed.countFor(colony.id)>0);
+    const partial = Tracker.partial(colony), working = Tracker.status(colony)==='WORKING', completed = Tracker.status(colony) === 'DONE' || (typeof Completed!=='undefined' && Completed.countFor(colony.id)>0);
     const count = value => { const raw=String(value); return /[0-9]/.test(raw) && raw.length<=9 ? UI.esc(raw) : '?'; };
     const circle = (value, color) => '<span class="cat-circle" style="background:'+color+'">'+count(value)+'</span>';
-    const html = partial || completed
-      ? '<div class="cat-marker'+(selected?' cat-selected':'')+(isClaimed(colony)?' cat-claimed':'')+'">'+circle(Tracker.done(colony),Tracker.COLORS.DONE)+(partial?circle(Tracker.todo(colony),Tracker.COLORS.WORKING):'')+'</div>'
+    const html = partial || completed || working
+      ? '<div class="cat-marker'+(selected?' cat-selected':'')+(isClaimed(colony)?' cat-claimed':'')+'">'+(working && !partial ? circle(Tracker.todo(colony),Tracker.COLORS.WORKING) : circle(Tracker.done(colony),Tracker.COLORS.DONE))+(partial?circle(Tracker.todo(colony),Tracker.COLORS.WORKING):'')+'</div>'
       : '<div class="'+cls+'" style="background:'+Tracker.color(colony)+';border-color:#344054"></div>';
     return L.divIcon({className:'',html,iconSize:[partial?76:44,44],iconAnchor:[partial?38:22,22]});
   }
@@ -65,6 +65,7 @@ const MapView = (() => {
   function markerLabel(c) {
     if(Tracker.partial(c)) return 'Working — '+Tracker.done(c)+' cats done; '+Tracker.todo(c)+' cats to do';
     if(Tracker.status(c)==='DONE' || (typeof Completed!=='undefined' && Completed.countFor(c.id)>0)) return Tracker.done(c)+' cats done; remaining: '+Tracker.todo(c);
+    if(Tracker.status(c)==='WORKING') return 'Working — '+Tracker.todo(c)+' cats to do';
     return estimateLabel(c);
   }
 
@@ -92,7 +93,7 @@ const MapView = (() => {
         title: (c.location_text || c.name || c.colony_code || 'Colony') + ' — ' + markerLabel(c),
         riseOnHover: true
       });
-      if(Tracker.status(c)!=='DONE' && !Tracker.partial(c) && !(typeof Completed!=='undefined' && Completed.countFor(c.id)>0)) m.bindTooltip(UI.esc(estimateLabel(c)), { permanent: true, direction: 'top', offset: [0, -10] });
+      if(!['DONE','WORKING'].includes(Tracker.status(c)) && !Tracker.partial(c) && !(typeof Completed!=='undefined' && Completed.countFor(c.id)>0)) m.bindTooltip(UI.esc(estimateLabel(c)), { permanent: true, direction: 'top', offset: [0, -10] });
       m.on('click', ev => {
         L.DomEvent.stopPropagation(ev);
         select(c.id);

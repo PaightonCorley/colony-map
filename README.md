@@ -125,3 +125,14 @@ count once toward the existing total. No city hall coordinates are written
 into colony records. Cities without a configured verified hall and records
 without a city remain unplaced. Public reference locations and provenance are
 in data/city-halls.json.
+
+## October 17 all-sheet count review
+
+All 16 sheets in COLONY TRACKER(1).xlsx were checked, including supplemental
+Granite Shoals rows. Fourteen contain colony records; X and Volunteers were
+reviewed as supporting sheets. Existing count/status changes are matched by
+stable source ID, not row position. Positive completed counts with an ongoing
+or unconfirmed status now produce paired green/orange markers; unknown
+remaining counts display ?. The latest explicit tracker done count takes
+precedence over historical matched counts; neither is added to the other.
+Town-center placeholders were added for Kingsland, Buchanan Dam and Tow.
