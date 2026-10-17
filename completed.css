@@ -6,10 +6,10 @@
 .completed-note {font-size:12px;line-height:1.45;color:#52655d;margin:0;padding:0 16px 10px;max-width:1050px;}
 .done-total {color:#17684e;}
 .done-total b {font-size:24px;}
-.done-marker {background:#187557;border:3px solid white;border-radius:50%;color:white;box-shadow:0 2px 7px #0005;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
 .done-row {width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;background:white;border:0;border-bottom:1px solid #e0e8e3;padding:16px 4px;color:#263d35;font:inherit;cursor:pointer;}
 .done-row small {display:block;color:#64756e;font-size:12px;margin-top:5px;}
 .done-row b {border-radius:10px;background:#e7f3ed;color:#17684e;padding:8px;min-width:42px;text-align:center;}
 .done-detail-count {font-size:36px;font-weight:750;color:#17684e;padding:20px 0;}
 .done-detail-count small {font-size:18px;}
 @media(max-width:600px){.completed-controls{padding:0 10px 7px;gap:5px}.completed-controls select{font-size:12px;padding:6px}.completed-controls .btn{font-size:12px;padding:6px}.completed-note{padding:0 10px 8px;font-size:11px}.done-total b{font-size:21px}}
+

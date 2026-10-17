@@ -41,7 +41,7 @@
 #map:not(.show-estimates) .leaflet-tooltip {display:none}
 
 .cat-marker {display:flex;align-items:center;justify-content:center;height:44px;gap:2px;filter:drop-shadow(0 1px 3px #0005)}
-.cat-circle {display:flex;align-items:center;justify-content:center;flex:none;min-width:34px;height:34px;padding:0 3px;border:2px solid #344054;border-radius:50%;color:#172b25;font-size:13px;font-weight:800;font-family:system-ui,sans-serif;box-sizing:border-box;white-space:nowrap}
+.cat-circle {display:flex;align-items:center;justify-content:center;flex:none;width:40px;height:40px;padding:0 2px;border:2px solid #344054;border-radius:50%;color:#172b25;font-size:13px;font-weight:800;font-family:system-ui,sans-serif;box-sizing:border-box;white-space:nowrap}
 .cat-selected .cat-circle {outline:3px solid #234e82;outline-offset:2px}
 .cat-claimed .cat-circle {box-shadow:0 0 0 3px #e39a1188}
 
@@ -49,6 +49,7 @@
 .history-overview button {display:grid;gap:4px;text-align:left;width:100%;min-height:48px;color:#183323}
 .history-overview strong {font-size:17px}.history-overview span {font-size:12px;line-height:1.4}
 
-.city-only-marker span {background:#23734b !important;color:#fff !important;border:3px dashed #fff !important;outline:2px solid #174e34;min-width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:800;font-size:15px;box-sizing:border-box}
 
 .list-pair {display:flex;gap:2px;flex:none;padding-top:3px}.list-pair i {width:30px;height:30px;border-radius:50%;border:1.5px solid #344054;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;font-style:normal}
+
+.tracker-counts .c:first-child {background:#eaf4e4;border-radius:10px;padding:8px 3px}

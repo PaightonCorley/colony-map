@@ -78,7 +78,7 @@ const Completed = (() => {
   }
   function drawMarker(g) {
     const marker=L.marker([g.latitude,g.longitude],{bubblingMouseEvents:false,title:g.address+' — '+g.cats+' completed cats'+(g.cityOnly?' — City/town placeholder, not a colony location':''),keyboard:true,
-      icon:L.divIcon({className:g.cityOnly?'done-marker city-only-marker':'done-marker',html:'<span>'+g.cats+'</span>',iconSize:[44,44],iconAnchor:[22,22]})}).addTo(layer);
+      icon:L.divIcon({className:g.cityOnly?'done-marker city-only-marker':'done-marker',html:'<div class="cat-marker"><span class="cat-circle" style="background:'+(g.cityOnly?'#23734b;color:white':'#C6E0B4')+'">'+g.cats+'</span></div>',iconSize:[44,44],iconAnchor:[22,22]})}).addTo(layer);
     marker.on('click',e=>{L.DomEvent.stopPropagation(e);openLocation(g);});
   }
   function fit() {
@@ -87,18 +87,27 @@ const Completed = (() => {
     const pts = [...data.locations,...data.unlocated].filter(mapped).map(g => [g.latitude,g.longitude]);
     if (pts.length) MapView.instance().fitBounds(pts,{padding:[45,45],maxZoom:11});
   }
+  function clinicPanel(id) {
+    if (!data) return '<div class="block"><h3>Clinic records</h3><p>Historical clinic records are not loaded yet.</p></div>';
+    const groups=data.locations.filter(g=>g.colonyId===id), dates={};
+    groups.forEach(g=>Object.entries(g.dates||{}).forEach(([date,n])=>{dates[date]=(dates[date]||0)+n;}));
+    return '<div class="block"><h3>Clinic records</h3>'+(groups.length ?
+      '<p><b>'+sum(groups)+' cats recorded as fixed in the historical clinic workbook.</b></p>'+Object.entries(dates).sort().map(([date,n])=>'<div class="kv"><dt>'+UI.esc(date==='Date uncle'?'Date unclear':date)+'</dt><dd><b>'+n+' fixed</b></dd></div>').join('')+
+      '<p class="hint">These records may already be included in Cats fixed above. Do not add them again. Individual cat identities are not available in this history.</p>' :
+      '<p>No historical clinic records linked to this location.</p>')+'<p class="hint">New visits appear in Activity &amp; history below. Use Add fixed cats only for newly spayed or neutered cats.</p></div>';
+  }
   function openLocation(g) {
     UI.openSheet({title:UI.esc(g.address),sub:UI.esc(g.area),body:
-      '<div class="done-detail-count">'+g.cats+' <small>cats completed</small></div>'+
+      '<div class="done-detail-count">'+g.cats+' <small>cats recorded as fixed</small></div>'+
       '<p>'+UI.esc(g.cityOnly ? 'CITY-ONLY RECORD — NOT A COLONY LOCATION. This dark green dot represents completed cats recorded in '+g.area+' without street addresses. This is a city hall or town-center display placeholder only: '+g.locationSource+'.' : mapped(g) ? 'Location: '+g.locationSource+'. Street-level coordinates may be approximate; confirm the site before visiting.' : (g.pendingAddressImport ? 'The workbook has an address for these cats. Its import is pending approval; the cats are included in the total.' : g.colonyId ? 'Recorded address retained; this location needs a confirmed map pin.' : 'The source has no street address for these cats. They remain included in the total.'))+'</p>'+
       '<p>Included once in the 1,754 source entries. '+UI.esc(g.match||g.reason||'')+'</p>'+
-      (g.colonyId?'<button class="btn" id="historyColony">Open tracker location</button>':'')+
+      (g.colonyId?'<button class="btn" id="historyColony">View current fixed / remaining counts</button><button class="btn btn-primary btn-big" id="historyAddFixed">ADD FIXED CATS</button>':'<p class="hint">To add newly fixed cats, open their actual colony from the List. This historical group is not a colony record.</p>')+
       '<p class="hint">Historical counts and tracker counts may overlap; they are not added together. A historical clinic entry does not confirm that the whole colony is finished.</p>'+
       (g.dates ? '<div class="block"><h3>Clinic records</h3>'+Object.entries(g.dates).sort().map(([date,n]) =>
         '<div class="kv"><dt>'+UI.esc(date === 'Date uncle' ? 'Date unclear' : date)+'</dt><dd>'+n+' cats</dd></div>').join('')+'</div>' : '')+
       '<details class="block"><summary>Source records ('+(g.records||[]).length+')</summary>'+ (g.records||[]).map(r=>'<p>'+UI.esc(r.date||'Date unclear')+' · '+UI.esc(r.source)+' · '+UI.esc(r.id)+'</p>').join('')+'</details>'+
       '<p class="hint">Source: HCHS_Completed_Cats.xlsx. Historical clinic entries are treated as completed, not independently verified surgery outcomes. Unique source IDs prevent repeated imports; individual cat identities are not available to verify repeat visits.</p>'});
-    if(g.colonyId)document.getElementById('historyColony').onclick=()=>ColonyPanel.open(g.colonyId);
+    if(g.colonyId){document.getElementById('historyColony').onclick=()=>ColonyPanel.open(g.colonyId);document.getElementById('historyAddFixed').onclick=()=>{ColonyPanel.open(g.colonyId);Forms.recordVisit(g.colonyId);};}
   }
   function openList() {
     hydrate(); const visible = rows();
@@ -112,6 +121,6 @@ const Completed = (() => {
     }));
   }
   function cityLocations(){hydrate();return data?data.unlocated.filter(mapped):[];}
-  return {init,render,fit,countFor,cityLocations,isActive:()=>active};
+  return {init,render,fit,countFor,clinicPanel,cityLocations,isActive:()=>active};
 })();
 

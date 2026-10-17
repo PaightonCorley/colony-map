@@ -58,8 +58,8 @@ const MapView = (() => {
     const circle = (value, color) => '<span class="cat-circle" style="background:'+color+'">'+count(value)+'</span>';
     const html = partial || completed || working
       ? '<div class="cat-marker'+(selected?' cat-selected':'')+(isClaimed(colony)?' cat-claimed':'')+'">'+(working && !partial ? circle(Tracker.todo(colony),Tracker.COLORS.WORKING) : circle(Tracker.done(colony),Tracker.COLORS.DONE))+(partial?circle(Tracker.todo(colony),Tracker.COLORS.WORKING):'')+'</div>'
-      : '<div class="'+cls+'" style="background:'+Tracker.color(colony)+';border-color:#344054"></div>';
-    return L.divIcon({className:'',html,iconSize:[partial?76:44,44],iconAnchor:[partial?38:22,22]});
+      : '<div class="cat-marker'+(selected?' cat-selected':'')+'">'+circle(Tracker.estimate(colony),Tracker.color(colony))+'</div>';
+    return L.divIcon({className:'',html,iconSize:[partial?82:44,44],iconAnchor:[partial?41:22,22]});
   }
 
   function markerLabel(c) {

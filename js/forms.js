@@ -43,7 +43,8 @@ const Forms = (() => {
     const orgs = window.CONFIG.ORGS;
 
     const body =
-      '<div class="field"><label for="visitDate">Date of the visit</label>' +
+      '<p class="hint"><b>Enter only cats newly spayed or neutered at this visit.</b> They will be added to this colony’s fixed count. Do not re-enter cats already counted in the tracker or historical clinic records.</p>'+
+      '<div class="field"><label for="visitDate">Clinic / visit date</label>' +
         '<input class="input" type="date" id="visitDate" value="' + UI.today() + '" max="' + UI.today() + '">' +
       '</div>' +
 
@@ -71,7 +72,7 @@ const Forms = (() => {
       UI.editorField();
 
     UI.openSheet({
-      title: 'Record TNVR Visit',
+      title: 'Add fixed cats / clinic visit',
       sub: UI.esc(c.location_text || c.name),
       body: body,
       footer: '<button class="btn" id="cancelVisit" style="flex:none;width:110px">Cancel</button>' +
@@ -95,7 +96,7 @@ const Forms = (() => {
       const before = c.known_fixed;
       const after = (before || 0) + fixed;
       const remBefore = c.est_remaining;
-      const remAfter = c.est_total_cats === null ? null : Math.max(0, c.est_total_cats - after);
+      const remAfter = remBefore === null ? null : Math.max(0, remBefore - fixed);
 
       let html = '';
       if (fixed === 0) {
@@ -103,7 +104,7 @@ const Forms = (() => {
       } else {
         html = 'Known Fixed <b>' + (before === null ? 'unknown' : before) + ' → ' + after + '</b>';
         if (remBefore !== null) html += ' · Remaining <b>' + remBefore + ' → ' + remAfter + '</b>';
-        else html += ' · Remaining stays <b>unknown</b> until an estimate is entered';
+        else html += ' · Remaining stays <b>unknown</b> until a remaining count is confirmed';
 
         if (c.est_total_cats !== null && after > c.est_total_cats) {
           html += '<br><b>More cats fixed than the estimate.</b> The estimate will be raised to ' +
@@ -764,3 +765,4 @@ const Forms = (() => {
   return { recordVisit, quickUpdate, editDetails, addColony, claim, dropPin,
            moreActions, confirmRestore, confirmArchive };
 })();
+

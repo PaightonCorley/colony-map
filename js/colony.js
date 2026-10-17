@@ -42,7 +42,8 @@ const ColonyPanel = (() => {
     return [
       banners(c),
       c.tracker ? Tracker.panel(c) : Tracker.panel(c) + countTiles(c),
-      '<button class="btn btn-primary btn-big" id="recordVisit">RECORD TNVR VISIT</button>',
+      Completed.clinicPanel(c.id),
+      '<button class="btn btn-primary btn-big" id="recordVisit">ADD FIXED CATS</button>',
       '<div class="btn-row">' +
         '<button class="btn" id="quickUpdate">Quick Update</button>' +
         '<button class="btn" id="editDetails">Edit Details</button>' +
@@ -102,10 +103,10 @@ const ColonyPanel = (() => {
     const rem = c.est_remaining;
     const remClass = rem === 0 ? ' zero' : '';
     return '<div class="counts">' +
-      tile('Estimated', c.est_total_cats) +
-      tile('Fixed', c.known_fixed) +
+      tile('Cats fixed', Tracker.done(c)) +
+      tile('Original estimate', c.est_total_cats) +
       '<div class="c rem"><div class="n' + (rem === null ? ' unknown' : remClass) + '">' +
-        (rem === null ? 'Unknown' : rem) + '</div><div class="l">Remaining</div></div>' +
+        (rem === null ? 'Unknown' : rem) + '</div><div class="l">Still to fix</div></div>' +
       tile('Kittens', c.kitten_count) +
     '</div>';
   }
