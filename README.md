@@ -79,15 +79,17 @@ or assume a matched clinic record means every cat at that colony is fixed.
 
 ## October 16 tracker update
 
-The current tracker was imported from COLONY TRACKER (4).xlsx. Row status colors
+The prepared import uses COLONY TRACKER (4).xlsx. Publishing its personal
+addresses and contact details is awaiting explicit user approval. The live
+database still contains the original 137 records. Row status colors
 match the workbook: Done green, Working orange, MASH Scheduled blue, Urgent yellow,
 Not Started white, Will Not Answer gray. Blank status stays white and unspecified.
 Done clinic cats do not establish that an entire colony is complete. Unknown
 remaining counts stay unknown. The 630 MASH source cats reconcile independently
 of original estimates and the earlier 1,754-entry clinic snapshot.
 
-All 137 previous database records and their existing pins were retained. 120 were
-matched and updated; 311 records were added. There are 448 records, including 17
+The prepared import retains all 137 previous database records and their pins.
+120 are matched for updates; 311 additions are prepared. It would have 448 records, including 17
 unmatched previous records, supplemental trapping entries and one excluded audit
 record. These are records, not a count of distinct confirmed colonies.
 
@@ -99,5 +101,5 @@ remain intact. No private workbook contents are committed to this repository.
 The List button includes all records, including those without coordinates.
 New coordinates are reused only for an unambiguous identical existing address;
 missing locations are never placed at invented city-center pins. Same-coordinate
-pins open a chooser so overlapping records remain accessible. Data updates are
-an October 16 import, not a continuous connection to Excel.
+pins open a chooser so overlapping records remain accessible. The prepared data is
+an October 16 snapshot, not a continuous connection to Excel.

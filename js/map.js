@@ -34,6 +34,8 @@ const MapView = (() => {
     L.control.scale({ imperial: true, metric: false, position: 'bottomright' }).addTo(map);
 
     layer = L.layerGroup().addTo(map);
+    const showLabels = () => document.getElementById('map').classList.toggle('show-estimates', map.getZoom() >= 13);
+    map.on('zoomend', showLabels); showLabels();
 
     map.on('click', e => {
       if (pickMode) {
@@ -60,7 +62,8 @@ const MapView = (() => {
   }
 
   function estimateLabel(c) {
-    return 'Est. ' + (Tracker.estimate(c) === 'Unknown' ? '?' : Tracker.estimate(c)) + ' cats';
+    const raw=String(Tracker.estimate(c));
+    return 'Est. ' + (!/[0-9]/.test(raw) || /^\d{4}-\d{2}-\d{2}$/.test(raw) || raw.length > 24 ? '?' : raw) + ' cats';
   }
 
   function isClaimed(c) {
@@ -82,7 +85,7 @@ const MapView = (() => {
         title: (c.location_text || c.name || c.colony_code || 'Colony') + ' — ' + estimateLabel(c),
         riseOnHover: true
       });
-      m.bindTooltip(estimateLabel(c), { permanent: true, direction: 'top', offset: [0, -10] });
+      m.bindTooltip(UI.esc(estimateLabel(c)), { permanent: true, direction: 'top', offset: [0, -10] });
       m.on('click', ev => {
         L.DomEvent.stopPropagation(ev);
         select(c.id);

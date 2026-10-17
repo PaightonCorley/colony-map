@@ -33,6 +33,7 @@ const Tracker = (() => {
     UI.$$('[data-record]').forEach(b=>b.addEventListener('click',()=>{const c=Store.byId(b.dataset.record);UI.closeSheet(true);if(c.latitude!==null){MapView.focus(c);MapView.select(c.id);}ColonyPanel.open(c.id);}));
   }
   function summary(list) {
+    if (Store.isLive() && !Store.all().some(c=>c.tracker)) { const banner=document.getElementById('envBanner');banner.hidden=false;banner.textContent='Latest workbook import pending. Showing previous map records.'; }
     const pinned=list.filter(c=>c.latitude!==null && c.longitude!==null && !c.out_of_area).length;
     document.getElementById('summary').innerHTML='<span><b>'+list.length+'</b> records</span><span><b>'+pinned+'</b> mapped</span><button id="needsPinList">'+(list.length-pinned)+' without map pins</button>';
     document.getElementById('needsPinList').onclick=()=>openList(list.filter(c=>c.latitude===null||c.longitude===null||c.out_of_area),'Records without map pins');
@@ -56,7 +57,7 @@ const Tracker = (() => {
     document.getElementById('colonyListBtn').onclick=()=>openList();
     document.getElementById('fitMapBtn').onclick=()=>MapView.fitAll(Filters.apply(Store.all()).filter(c=>!c.out_of_area));
     document.getElementById('locateBtn').onclick=async()=>{try {const p=await MapView.locate();MapView.instance().setView([p.lat,p.lng],14);}catch(e){UI.toast(e.message,'err');}};
-    document.getElementById('colorLegend').innerHTML=Object.entries(COLORS).filter(([s])=>s!=='Unspecified').map(([s,c])=>'<span><i style="background:'+c+'"></i>'+UI.esc(s)+'</span>').join('')+'<p>Blank status stays white. Green follows the tracker; it does not confirm there are no cats left to fix.</p>';
+    document.getElementById('colorLegend').innerHTML=Object.entries(COLORS).filter(([s])=>s!=='Unspecified').map(([s,c])=>'<span><i style="background:'+c+'"></i>'+UI.esc(s)+'</span>').join('')+'<p>Zoom in to see estimated cat labels. Blank status stays white. Green follows the tracker; it does not confirm there are no cats left to fix.</p>';
   }
   return {decode,encode,status,color,number,estimate,todo,done,badge,panel,openList,summary,edit,init,COLORS};
 })();

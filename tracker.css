@@ -37,3 +37,5 @@
  .sheet-foot {padding-bottom:calc(12px + env(safe-area-inset-bottom))}
 }
 @media(max-height:500px){.completed-controls{display:none}.sheet{max-height:96dvh}.tracker-tools{padding-top:0;padding-bottom:0}}
+
+#map:not(.show-estimates) .leaflet-tooltip {display:none}
