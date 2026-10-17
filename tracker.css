@@ -39,3 +39,8 @@
 @media(max-height:500px){.completed-controls{display:none}.sheet{max-height:96dvh}.tracker-tools{padding-top:0;padding-bottom:0}}
 
 #map:not(.show-estimates) .leaflet-tooltip {display:none}
+
+.cat-marker {display:flex;align-items:center;justify-content:center;height:44px;gap:2px;filter:drop-shadow(0 1px 3px #0005)}
+.cat-circle {display:flex;align-items:center;justify-content:center;flex:none;min-width:34px;height:34px;padding:0 3px;border:2px solid #344054;border-radius:50%;color:#172b25;font-size:13px;font-weight:800;font-family:system-ui,sans-serif;box-sizing:border-box;white-space:nowrap}
+.cat-selected .cat-circle {outline:3px solid #234e82;outline-offset:2px}
+.cat-claimed .cat-circle {box-shadow:0 0 0 3px #e39a1188}

@@ -56,7 +56,7 @@ database password are never in this repository and never should be.
 
 ## Completed cats view (October 2026)
 
-The default view uses the 1,754-entry HCHS_Completed_Cats.xlsx snapshot:
+The optional Earlier clinic summary view uses the 1,754-entry HCHS_Completed_Cats.xlsx snapshot:
 1,737 dated past clinic entries through October 14 plus 17 with unclear dates.
 Past entries are treated as completed, not independently verified surgery outcomes.
 This count is not added to the colony database's known_fixed counts, and does not
@@ -79,19 +79,18 @@ or assume a matched clinic record means every cat at that colony is fixed.
 
 ## October 16 tracker update
 
-The prepared import uses COLONY TRACKER (4).xlsx. Publishing its personal
-addresses and contact details is awaiting explicit user approval. The live
-database still contains the original 137 records. Row status colors
-match the workbook: Done green, Working orange, MASH Scheduled blue, Urgent yellow,
-Not Started white, Will Not Answer gray. Blank status stays white and unspecified.
-Done clinic cats do not establish that an entire colony is complete. Unknown
-remaining counts stay unknown. The 630 MASH source cats reconcile independently
-of original estimates and the earlier 1,754-entry clinic snapshot.
+The October 16 COLONY TRACKER (4).xlsx snapshot was imported October 17.
+All 431 source records were written: 120 existing records updated and 311 added.
+All 137 prior records and their coordinates were retained, for 448 total records.
+93 records have in-area map pins; entries without usable pins remain in the list.
+These are records, not a count of distinct confirmed colonies. The 630 MASH cats
+reconcile independently of original estimates and the earlier clinic snapshot.
 
-The prepared import retains all 137 previous database records and their pins.
-120 are matched for updates; 311 additions are prepared. It would have 448 records, including 17
-unmatched previous records, supplemental trapping entries and one excluded audit
-record. These are records, not a count of distinct confirmed colonies.
+Status colors follow the workbook. Green circles display cats done. Records with
+positive done and remaining counts are shown as Working with paired green (done)
+and orange (remaining) circles. This derived status takes precedence over the
+source status in map, list and filters; the source metadata remains preserved.
+Unknown remaining counts stay unknown and never establish completion.
 
 Workbook metadata is stored with a versioned [HCHS_TRACKER_V1] marker in the
 existing original_notes field and decoded by js/tracker.js. The original note
@@ -101,5 +100,5 @@ remain intact. No private workbook contents are committed to this repository.
 The List button includes all records, including those without coordinates.
 New coordinates are reused only for an unambiguous identical existing address;
 missing locations are never placed at invented city-center pins. Same-coordinate
-pins open a chooser so overlapping records remain accessible. The prepared data is
+pins open a chooser so overlapping records remain accessible. The imported data is
 an October 16 snapshot, not a continuous connection to Excel.

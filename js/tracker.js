@@ -8,7 +8,9 @@ const Tracker = (() => {
     return c;
   }
   function encode(c, meta) { return (c.original_notes || '').split(MARK)[0] + MARK + JSON.stringify(meta); }
-  function status(c) { return c.tracker ? c.tracker.status || 'Unspecified' : ({complete:'DONE',in_progress:'WORKING',needs_tnvr:'NOT STARTED'}[c.status] || 'Unspecified'); }
+  function positiveCount(value) { return /^\s*\d+(?:\s*[-–]\s*\d+)?\s*\+?\s*$/.test(String(value)) && (String(value).match(/\d+/g)||[]).some(n=>Number(n)>0); }
+  function partial(c) { return positiveCount(done(c)) && positiveCount(todo(c)); }
+  function status(c) { if(partial(c)) return 'WORKING'; return c.tracker ? c.tracker.status || 'Unspecified' : ({complete:'DONE',in_progress:'WORKING',needs_tnvr:'NOT STARTED'}[c.status] || 'Unspecified'); }
   function color(c) { return COLORS[status(c)] || '#FFFFFF'; }
   function number(s) { return /^\d+$/.test(String(s ?? '').trim()) ? Number(s) : null; }
   function estimate(c) { return c.tracker ? c.tracker.estimate || 'Unknown' : c.original_estimate_text || (c.est_total_cats ?? 'Unknown'); }
@@ -57,7 +59,7 @@ const Tracker = (() => {
     document.getElementById('colonyListBtn').onclick=()=>openList();
     document.getElementById('fitMapBtn').onclick=()=>MapView.fitAll(Filters.apply(Store.all()).filter(c=>!c.out_of_area));
     document.getElementById('locateBtn').onclick=async()=>{try {const p=await MapView.locate();MapView.instance().setView([p.lat,p.lng],14);}catch(e){UI.toast(e.message,'err');}};
-    document.getElementById('colorLegend').innerHTML=Object.entries(COLORS).filter(([s])=>s!=='Unspecified').map(([s,c])=>'<span><i style="background:'+c+'"></i>'+UI.esc(s)+'</span>').join('')+'<p>Zoom in to see estimated cat labels. Blank status stays white. Green follows the tracker; it does not confirm there are no cats left to fix.</p>';
+    document.getElementById('colorLegend').innerHTML=Object.entries(COLORS).filter(([s])=>s!=='Unspecified').map(([s,c])=>'<span><i style="background:'+c+'"></i>'+UI.esc(s)+'</span>').join('')+'<p>Green circles show cats done. Paired green and orange circles mean Working: done on green, still to do on orange. ? means the count is unknown. Other estimates appear when you zoom in. Green follows the tracker; a blank remaining count does not confirm the colony is finished.</p>';
   }
-  return {decode,encode,status,color,number,estimate,todo,done,badge,panel,openList,summary,edit,init,COLORS};
+  return {decode,encode,partial,status,color,number,estimate,todo,done,badge,panel,openList,summary,edit,init,COLORS};
 })();

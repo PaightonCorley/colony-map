@@ -53,12 +53,19 @@ const MapView = (() => {
     const cls = 'pin pin-' + UI.statusColor(colony.status) +
       (selected ? ' pin-sel' : '') +
       (isClaimed(colony) ? ' pin-claim' : '');
-    return L.divIcon({
-      className: '',
-      html: '<div class="' + cls + '" style="background:' + Tracker.color(colony) + ';border-color:#344054"></div>',
-      iconSize: [44, 44],
-      iconAnchor: [22, 22]
-    });
+    const partial = Tracker.partial(colony), completed = Tracker.status(colony) === 'DONE';
+    const count = value => { const raw=String(value); return /[0-9]/.test(raw) && raw.length<=9 ? UI.esc(raw) : '?'; };
+    const circle = (value, color) => '<span class="cat-circle" style="background:'+color+'">'+count(value)+'</span>';
+    const html = partial || completed
+      ? '<div class="cat-marker'+(selected?' cat-selected':'')+(isClaimed(colony)?' cat-claimed':'')+'">'+circle(Tracker.done(colony),Tracker.COLORS.DONE)+(partial?circle(Tracker.todo(colony),Tracker.COLORS.WORKING):'')+'</div>'
+      : '<div class="'+cls+'" style="background:'+Tracker.color(colony)+';border-color:#344054"></div>';
+    return L.divIcon({className:'',html,iconSize:[partial?76:44,44],iconAnchor:[partial?38:22,22]});
+  }
+
+  function markerLabel(c) {
+    if(Tracker.partial(c)) return 'Working — '+Tracker.done(c)+' cats done; '+Tracker.todo(c)+' cats to do';
+    if(Tracker.status(c)==='DONE') return Tracker.done(c)+' cats done; remaining: '+Tracker.todo(c);
+    return estimateLabel(c);
   }
 
   function estimateLabel(c) {
@@ -82,10 +89,10 @@ const MapView = (() => {
       const m = L.marker([c.latitude, c.longitude], {
         icon: icon(c, c.id === selectedId),
         keyboard: true,
-        title: (c.location_text || c.name || c.colony_code || 'Colony') + ' — ' + estimateLabel(c),
+        title: (c.location_text || c.name || c.colony_code || 'Colony') + ' — ' + markerLabel(c),
         riseOnHover: true
       });
-      m.bindTooltip(UI.esc(estimateLabel(c)), { permanent: true, direction: 'top', offset: [0, -10] });
+      if(Tracker.status(c)!=='DONE' && !Tracker.partial(c)) m.bindTooltip(UI.esc(estimateLabel(c)), { permanent: true, direction: 'top', offset: [0, -10] });
       m.on('click', ev => {
         L.DomEvent.stopPropagation(ev);
         select(c.id);
