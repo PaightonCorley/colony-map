@@ -15,7 +15,7 @@ const Tracker = (() => {
   function number(s) { return /^\d+$/.test(String(s ?? '').trim()) ? Number(s) : null; }
   function estimate(c) { return c.tracker ? c.tracker.estimate || 'Unknown' : c.original_estimate_text || (c.est_total_cats ?? 'Unknown'); }
   function todo(c) { return c.tracker ? c.tracker.todo || 'Unknown' : c.est_remaining ?? 'Unknown'; }
-  function done(c) { return c.known_fixed ?? (c.tracker ? c.tracker.done || 'Unknown' : 'Unknown'); }
+  function done(c) { const history=typeof Completed!=='undefined'?Completed.countFor(c.id):null; if(history>0)return history; return c.known_fixed ?? (c.tracker ? c.tracker.done || 'Unknown' : 'Unknown'); }
   function badge(c) { return '<span class="tracker-status" style="background:'+color(c)+'">'+UI.esc(status(c))+'</span>'; }
   function panel(c) {
     if (!c.tracker) return '<div class="banner review">Previous map record retained. Not matched to the October 16 workbook.</div>';
@@ -23,6 +23,7 @@ const Tracker = (() => {
     const row=(label,val)=>val ? '<div class="kv"><dt>'+label+'</dt><dd>'+UI.esc(val)+'</dd></div>' : '';
     return '<div class="tracker-heading">'+badge(c)+'<small>Tracker updated October 16, 2026</small></div>'+
       (status(c)==='DONE' && !t.todo ? '<p class="tracker-note">Done is the workbook status. Remaining cats are unknown unless confirmed below.</p>' : '')+
+      (typeof Completed!=='undefined' && Completed.countFor(c.id)>0 ? '<p class="tracker-note">Done count: '+Completed.countFor(c.id)+' historical clinic entries. Tracker originally records '+UI.esc(c.known_fixed ?? t.done ?? 'unknown')+'. These counts may overlap and are not added together.</p>' : '')+
       '<div class="counts tracker-counts">'+[['Cats DONE',done(c)],['Cats TO DO',todo(c)],['Original estimate',estimate(c)]].map(([l,v])=>'<div class="c"><div class="n">'+UI.esc(v)+'</div><div class="l">'+l+'</div></div>').join('')+'</div>'+
       '<div class="block"><h3>Trapping &amp; clinic details</h3>'+row('Can they trap?',t.can_trap)+row('Trapper',t.trapper)+row('Caretaker',t.caretaker)+row('Clinic date(s)',t.clinic_dates)+row('City / county',t.jurisdiction)+row('Review note',t.review)+
       (t.additional_entries || []).map(a=>row('Additional tracker notes', [a.notes,a.trap_notes,a.caretaker,a.phone,a.estimate ? 'Original estimate: '+a.estimate : ''].filter(Boolean).join(' · '))).join('')+

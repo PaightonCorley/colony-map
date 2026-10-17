@@ -53,7 +53,7 @@ const MapView = (() => {
     const cls = 'pin pin-' + UI.statusColor(colony.status) +
       (selected ? ' pin-sel' : '') +
       (isClaimed(colony) ? ' pin-claim' : '');
-    const partial = Tracker.partial(colony), completed = Tracker.status(colony) === 'DONE';
+    const partial = Tracker.partial(colony), completed = Tracker.status(colony) === 'DONE' || (typeof Completed!=='undefined' && Completed.countFor(colony.id)>0);
     const count = value => { const raw=String(value); return /[0-9]/.test(raw) && raw.length<=9 ? UI.esc(raw) : '?'; };
     const circle = (value, color) => '<span class="cat-circle" style="background:'+color+'">'+count(value)+'</span>';
     const html = partial || completed
@@ -64,7 +64,7 @@ const MapView = (() => {
 
   function markerLabel(c) {
     if(Tracker.partial(c)) return 'Working — '+Tracker.done(c)+' cats done; '+Tracker.todo(c)+' cats to do';
-    if(Tracker.status(c)==='DONE') return Tracker.done(c)+' cats done; remaining: '+Tracker.todo(c);
+    if(Tracker.status(c)==='DONE' || (typeof Completed!=='undefined' && Completed.countFor(c.id)>0)) return Tracker.done(c)+' cats done; remaining: '+Tracker.todo(c);
     return estimateLabel(c);
   }
 
@@ -92,7 +92,7 @@ const MapView = (() => {
         title: (c.location_text || c.name || c.colony_code || 'Colony') + ' — ' + markerLabel(c),
         riseOnHover: true
       });
-      if(Tracker.status(c)!=='DONE' && !Tracker.partial(c)) m.bindTooltip(UI.esc(estimateLabel(c)), { permanent: true, direction: 'top', offset: [0, -10] });
+      if(Tracker.status(c)!=='DONE' && !Tracker.partial(c) && !(typeof Completed!=='undefined' && Completed.countFor(c.id)>0)) m.bindTooltip(UI.esc(estimateLabel(c)), { permanent: true, direction: 'top', offset: [0, -10] });
       m.on('click', ev => {
         L.DomEvent.stopPropagation(ev);
         select(c.id);

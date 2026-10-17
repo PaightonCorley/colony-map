@@ -102,3 +102,16 @@ New coordinates are reused only for an unambiguous identical existing address;
 missing locations are never placed at invented city-center pins. Same-coordinate
 pins open a chooser so overlapping records remain accessible. The imported data is
 an October 16 snapshot, not a continuous connection to Excel.
+
+## Completed source reconciliation (October 17)
+
+The completed workbook was re-read at row level: 1,754 entries, 1,754 unique
+source IDs, 633 with a recorded address and 1,121 without a street address.
+349 cats match existing tracker records by normalized street and city; 284
+remain in address groups awaiting import or match review (including 20 cats
+with multiple candidate records). No new historical addresses were imported.
+The main map now shows the complete source total and an inspectable ledger.
+Each source ID appears exactly once. Tracker totals are not added to this
+ledger. Matching source totals replace the green marker display count while
+the original tracker count is retained separately. Clinic entries are not
+independently verified procedures or unique animal identities.

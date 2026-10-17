@@ -5,10 +5,19 @@ const Completed = (() => {
     if (!data) return;
     data.locations.forEach(g => {
       const c = Store.byId(g.colonyId);
-      g.address = c ? c.location_text : 'Linked colony unavailable';
-      g.latitude = c ? c.latitude : null; g.longitude = c ? c.longitude : null;
+      g.address = c ? c.location_text : g.pendingAddressImport ? 'Recorded address awaiting import' : 'Linked colony unavailable';
+      g.latitude = c && !c.out_of_area ? c.latitude : null; g.longitude = c && !c.out_of_area ? c.longitude : null;
       g.locationSource = 'existing colony map';
     });
+  }
+  function countFor(id) { return data ? sum(data.locations.filter(g=>g.colonyId===id)) : null; }
+  function overview() {
+    hydrate();
+    const el=document.getElementById('historyOverview');
+    if(!data){el.textContent=error||'Loading completed cats…';return;}
+    const pinned=sum(data.locations.filter(mapped)), addressed=sum(data.locations), missing=sum(data.unlocated);
+    el.innerHTML='<button id="historyOpen"><strong>'+fmt(data.total)+' completed cat records</strong><span>'+fmt(pinned)+' on map · '+fmt(addressed-pinned)+' addressed, need pins · '+fmt(missing)+' missing addresses</span></button>';
+    document.getElementById('historyOpen').onclick=()=>{document.getElementById('search').value='';document.getElementById('completedFilter').value='all';openList();};
   }
   const mapped = g => Number.isFinite(g.latitude) && Number.isFinite(g.longitude);
   const sum = rows => rows.reduce((n, g) => n + g.cats, 0);
@@ -33,13 +42,13 @@ const Completed = (() => {
     if (!data) return [];
     const q = document.getElementById('search').value.trim().toLowerCase();
     const filter = document.getElementById('completedFilter').value;
-    return [...data.locations, ...data.unlocated.map((g, i) => ({...g, id:'unknown-'+i, address:'Location match needed'}))]
+    return [...data.locations, ...data.unlocated.map((g, i) => ({...g, id:'unknown-'+i, address:g.reason || 'Source has no street address'}))]
       .filter(g => (!q || (g.address+' '+g.area).toLowerCase().includes(q)) &&
         (filter === 'all' || (filter === 'mapped' ? mapped(g) : !mapped(g))))
       .sort((a, b) => b.cats-a.cats || a.area.localeCompare(b.area));
   }
   function render() {
-    hydrate();
+    hydrate(); overview();
     ['filterBtn','chips','attentionBtn','addBtn','colonyListBtn','fitMapBtn','locateBtn'].forEach(id => document.getElementById(id).hidden = active);
     ['completedFilter','doneListBtn','completedNote'].forEach(id => document.getElementById(id).hidden = !active);
     document.getElementById('search').placeholder = active ? 'Search completed addresses or areas…' : 'Search address, caretaker, notes…';
@@ -57,8 +66,8 @@ const Completed = (() => {
       '<span class="s-item done-total"><b>'+fmt(data.total)+'</b> cats completed</span><span class="sep">|</span>'+
       '<span class="s-item"><b>'+fmt(mappedCats)+'</b> on map</span><span class="sep">|</span>'+
       '<span class="s-item"><b>'+fmt(data.total-mappedCats)+'</b> need a location</span>';
-    document.getElementById('completedNote').textContent = 'Earlier clinic snapshot (separate from the current tracker). Through Oct 14, 2026 · '+data.dateUnclear+' entries have unclear dates. '+
-      'Past clinic entries are treated as completed; this does not mean every cat in a colony is fixed. Only existing address matches are pinned. '+
+    document.getElementById('completedNote').textContent = 'All unique source entries through Oct 14, 2026 · '+data.dateUnclear+' entries have unclear dates. '+
+      'Tracker counts are not added again. Missing addresses remain in the total. '+
       fmt(sum(visible))+' cats match your search and filter.';
     visible.filter(mapped).forEach(g => {
       const marker = L.marker([g.latitude, g.longitude], {
@@ -78,14 +87,18 @@ const Completed = (() => {
   function openLocation(g) {
     UI.openSheet({title:UI.esc(g.address),sub:UI.esc(g.area),body:
       '<div class="done-detail-count">'+g.cats+' <small>cats completed</small></div>'+
-      '<p>'+UI.esc(mapped(g) ? 'Location: '+g.locationSource+'. Street-level coordinates may be approximate; confirm the site before visiting.' : 'These records need to be matched to colony locations. Full source addresses remain in the completed workbook.')+'</p>'+
-      '<p>These cats are included in the 1,754-cat completed list. The number of cats still at this colony is unknown.</p>'+
+      '<p>'+UI.esc(mapped(g) ? 'Location: '+g.locationSource+'. Street-level coordinates may be approximate; confirm the site before visiting.' : (g.pendingAddressImport ? 'The workbook has an address for these cats. Its import is pending approval; the cats are included in the total.' : g.colonyId ? 'Recorded address retained; this location needs a confirmed map pin.' : 'The source has no street address for these cats. They remain included in the total.'))+'</p>'+
+      '<p>Included once in the 1,754 source entries. '+UI.esc(g.match||g.reason||'')+'</p>'+
+      (g.colonyId?'<button class="btn" id="historyColony">Open tracker location</button>':'')+
+      '<p class="hint">Historical counts and tracker counts may overlap; they are not added together. A historical clinic entry does not confirm that the whole colony is finished.</p>'+
       (g.dates ? '<div class="block"><h3>Clinic records</h3>'+Object.entries(g.dates).sort().map(([date,n]) =>
         '<div class="kv"><dt>'+UI.esc(date === 'Date uncle' ? 'Date unclear' : date)+'</dt><dd>'+n+' cats</dd></div>').join('')+'</div>' : '')+
-      '<p class="hint">Source: HCHS_Completed_Cats.xlsx. Historical clinic entries are treated as completed, not independently verified surgery outcomes.</p>'});
+      '<details class="block"><summary>Source records ('+(g.records||[]).length+')</summary>'+ (g.records||[]).map(r=>'<p>'+UI.esc(r.date||'Date unclear')+' · '+UI.esc(r.source)+' · '+UI.esc(r.id)+'</p>').join('')+'</details>'+
+      '<p class="hint">Source: HCHS_Completed_Cats.xlsx. Historical clinic entries are treated as completed, not independently verified surgery outcomes. Unique source IDs prevent repeated imports; individual cat identities are not available to verify repeat visits.</p>'});
+    if(g.colonyId)document.getElementById('historyColony').onclick=()=>ColonyPanel.open(g.colonyId);
   }
   function openList() {
-    const visible = rows();
+    hydrate(); const visible = rows();
     UI.openSheet({title:'Completed cats',sub:fmt(sum(visible))+' cats in this view',body:
       '<p class="hint">Green counts have a map location. Other records remain included in the completed total.</p>'+
       (visible.length ? visible.map(g => '<button class="done-row" data-done="'+g.id+'"><span><strong>'+UI.esc(g.address)+'</strong><small>'+UI.esc(g.area)+' · '+(mapped(g)?'On map':'Needs a location')+'</small></span><b>'+g.cats+'</b></button>').join('') : '<p>No matching records.</p>')});
@@ -95,6 +108,6 @@ const Completed = (() => {
       openLocation(g);
     }));
   }
-  return {init,render,fit,isActive:()=>active};
+  return {init,render,fit,countFor,isActive:()=>active};
 })();
 
