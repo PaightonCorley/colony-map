@@ -77,9 +77,9 @@ const Completed = (() => {
     return true;
   }
   function drawMarker(g) {
-    const marker=L.marker([g.latitude,g.longitude],{title:g.address+' — '+g.cats+' completed cats'+(g.cityOnly?' — City hall placeholder, not a colony location':''),keyboard:true,
+    const marker=L.marker([g.latitude,g.longitude],{bubblingMouseEvents:false,title:g.address+' — '+g.cats+' completed cats'+(g.cityOnly?' — City hall placeholder, not a colony location':''),keyboard:true,
       icon:L.divIcon({className:g.cityOnly?'done-marker city-only-marker':'done-marker',html:'<span>'+g.cats+'</span>',iconSize:[44,44],iconAnchor:[22,22]})}).addTo(layer);
-    marker.on('click',()=>openLocation(g));
+    marker.on('click',e=>{L.DomEvent.stopPropagation(e);openLocation(g);});
   }
   function fit() {
     if (!data) return;
